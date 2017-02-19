@@ -59,9 +59,12 @@ public extension DataRequest {
             var JSONToMap: NSDictionary?
             if let keyPath = keyPath , keyPath.isEmpty == false {
                 JSONToMap = (result.value as AnyObject?)?.value(forKeyPath: keyPath) as? NSDictionary
-            } else {
-                JSONToMap = result.value as? NSDictionary
+            } else if let dict = result.value as? NSDictionary {
+                JSONToMap = dict
+            } else if let array = result.value as? NSArray {
+                JSONToMap = NSDictionary.init(dictionary: ["": array])
             }
+            
             if JSONToMap == nil {
                 JSONToMap = NSDictionary()
             }
